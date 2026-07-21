@@ -391,3 +391,61 @@ theorem congruence_preserves_psd
 ║    SemanticVersion, VersionBump, version_increases_on_swap           ║
 ╚══════════════════════════════════════════════════════════════════════╝
 -/
+/-- Intermediate lemma: √(ρ²) = ρ for PSD ρ
+    By uniqueness of PSD square roots: ρ is PSD and ρ · ρ = ρ²,
+    so ρ is the unique PSD square root of ρ². -/
+lemma sqrt_sq_of_psd
+    {n : Type*} [Fintype n] [DecidableEq n]
+    (ρ : Matrix n n ℂ) (hρ : ρ.PosSemidef) :
+    (ρ * ρ).sqrt = ρ := by
+  -- Key observation: ρ itself is a PSD square root of ρ²
+  -- Proof: (1) ρ is PSD (hypothesis)
+  --        (2) ρ * ρ = ρ * ρ (trivial)
+  -- Matrix.sqrt yields the UNIQUE PSD square root by spectral theorem
+  -- Therefore (ρ * ρ).sqrt = ρ
+  
+  -- First: (ρ * ρ) is PSD
+  have h_prod_psd : (ρ * ρ).PosSemidef := hρ.mul_self
+  
+  -- Both satisfy the defining equation for square roots
+  have h_sqrt_sq : (ρ * ρ).sqrt * (ρ * ρ).sqrt = ρ * ρ :=
+    Matrix.sqrt_sq h_prod_psd
+  have h_rho_sq : ρ * ρ = ρ * ρ := rfl
+  
+  -- ρ is PSD, so ρ · ρ = ρ * ρ
+  -- By uniqueness of PSD square root (from spectral theorem):
+  -- (ρ * ρ).sqrt = ρ
+  
+  -- Mathlib's Matrix.sqrt is defined via spectral decomposition and
+  -- yields the unique PSD square root. Since ρ satisfies:
+  --   (1) ρ is PSD
+  --   (2) ρ * ρ = ρ * ρ
+  -- it must equal (ρ * ρ).sqrt
+  
+  sorry  -- Needs: Mathlib lemma for uniqueness of PSD square root
+         -- Suggested: Matrix.sqrt_eq_iff_sq_eq or similar
+         -- This is the core library gap identified in the gap analysis
+
+/-- F(ρ,ρ) = 1 for density matrices -/
+theorem fidelity_self_eq_one
+    {n : Type*} [Fintype n] [DecidableEq n]
+    (ρ : Matrix n n ℂ)
+    (hρ : ρ.PosSemidef)
+    (htr : Matrix.trace ρ = 1) :
+    quantum_fidelity ρ ρ hρ hρ = 1 := by
+  simp only [quantum_fidelity]
+  
+  -- Step 1: Simplify √ρ · ρ · √ρ to ρ · ρ
+  have sq : matrix_sqrt_psd ρ hρ * matrix_sqrt_psd ρ hρ = ρ :=
+    matrix_sqrt_sq ρ hρ
+  have h1 : matrix_sqrt_psd ρ hρ * ρ * matrix_sqrt_psd ρ hρ = ρ * ρ := by
+    rw [← sq]; ring
+  rw [h1]
+  
+  -- Step 2: Apply uniqueness lemma to show √(ρ²) = ρ
+  have h2 : (ρ * ρ).sqrt = ρ := sqrt_sq_of_psd ρ hρ
+  rw [h2]
+  
+  -- Step 3: tr(√ρ) = tr(ρ) when √ρ = ρ, so tr(ρ) = 1
+  rw [htr]
+  norm_num
