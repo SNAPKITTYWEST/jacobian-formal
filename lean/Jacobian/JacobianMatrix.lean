@@ -7,10 +7,10 @@ import Jacobian.FormalDerivative
 
 namespace Jacobian
 
-variable (n : ℕ)
+variable (n : N)
 
-abbrev PolyRing := Polynomial (Fin n → ℂ)
-abbrev PolyMap := Fin n → PolyRing n
+abbrev PolyRing := Polynomial (Fin n -> C)
+abbrev PolyMap := Fin n -> PolyRing n
 
 def formal_deriv (j : Fin n) (p : PolyRing n) : PolyRing n :=
   Polynomial.derivative (Finsupp.single j 1) p
@@ -29,10 +29,13 @@ theorem jacobian_identity :
     jacobian n poly_map_id = 1 := by
   ext i j
   unfold jacobian poly_map_id formal_deriv
+  simp only [Matrix.one_apply]
   by_cases h : i = j
-  · simp [h, Polynomial.derivative_X, Finsupp.single_eq_same]
-  · simp [h, Polynomial.derivative_X, Finsupp.single_eq_of_ne (Ne.symm h)]
-    sorry -- Matrix.one_apply_ne (by exact h)
+  . simp [h, Polynomial.derivative_X, Finsupp.single_eq_same]
+  . simp [h, Polynomial.derivative_X,
+          Finsupp.single_eq_of_ne (Ne.symm h),
+          Finsupp.single_ne_zero_iff,
+          show i != j from h]
 
 -- AUXILIARY: Determinant of identity is 1
 theorem det_identity :
