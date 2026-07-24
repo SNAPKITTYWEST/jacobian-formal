@@ -13,6 +13,7 @@ open import Relation.Binary.PropositionalEquality using (_≡_; refl; cong)
 open import Core.ErrorCode using (ErrorCode; BOB_SUCCESS)
 open import Core.QuantumState using (QuantumState; Dimension; isValidDim; canApplyGate)
 open import Core.Predicates using (basisStateInRange; qubitIndexValid; dimensionPreserved)
+open import Core.BitCounting using (gate_exit_pairs_count; pairs_updated_j_equals_i)
 
 -- ============================================================================
 -- Loop Context: Gate Application Setup
@@ -182,7 +183,8 @@ gate_step s s' i inv_i step =
                -- j = i, and qubit_bit = 0, so this pair just got updated
                let (h_pairs_inc, _) = GateIterationStep.pairs_updated_invariant step
                    h_pairs_pred = h_pairs_inc h_qubit_zero
-               in ?  -- show num_pairs_updated s' ≥ (i / (2*bit_mask)) + 1
+               in pairs_updated_j_equals_i i (GateContext.bit_mask (GateLoopState.ctx s)) h_qubit_zero
+                    (λ pairs → h_pairs_pred)
              (no ¬p) →
                -- j < i, use previous invariant
                let h_j_lt_i = ≤-to-< h_j_le_i ¬p
@@ -215,7 +217,10 @@ gate_exit :
 
 gate_exit s i inv_i h_done =
   ⟨ trans (GateInvariant.h_states_examined inv_i) h_done
-  , ?  -- num_pairs_updated = dim / 2 (half the basis states have qubit bit 0)
+  , gate_exit_pairs_count i (GateContext.dim (GateLoopState.ctx s))
+      (GateContext.bit_mask (GateLoopState.ctx s)) h_done
+      (by-dim-is-power-of-2)
+      (GateLoopState.num_pairs_updated s)
   , λ j h_j_lt →
       basisStateInRange j (GateContext.dim (GateLoopState.ctx s))
   , GateInvariant.h_error_clear inv_i

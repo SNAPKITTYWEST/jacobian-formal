@@ -113,6 +113,11 @@ record StepTransition (s s' : EvolutionState) : Set where
       (EvolutionState.hamiltonian s ≡ EvolutionState.hamiltonian s') ∨
       (hamiltonianImmutable (EvolutionState.hamiltonian s) (EvolutionState.hamiltonian s'))
 
+    -- Quantum state remains valid-dimensioned after evolution (physics invariant)
+    state_valid_preserved :
+      isValidDim (EvolutionState.state s) →
+      isValidDim (EvolutionState.state s')
+
     -- Error status either remains success or becomes error (and loop exits)
     error_inv : (EvolutionState.error_status s' ≡ 0) ∨
                (EvolutionState.error_status s' ≠ 0)
