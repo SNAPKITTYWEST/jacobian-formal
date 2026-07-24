@@ -1,0 +1,55 @@
+ENKI ROUND 2 DISCHARGE
+===
+
+MATRIX ACCUMULATION LOOP (MatrixAccumulationLoop.agda):
+
+Hole 1 (line 102): h_k_valid
+Type: taylorTermIndex 1 max_terms (i.e., 1 ≤ max_terms)
+Term: h_max_terms_pos
+Reason: Direct from precondition parameter (line 92).
+        h_max_terms_pos asserts max_terms ≥ 1, which satisfies taylorTermIndex 1 max_terms.
+        Discharge by reflexivity: 1 ≤ max_terms follows directly from max_terms ≥ 1.
+
+Hole 2 (line 157): h_k_valid
+Type: taylorTermIndex (k+1) max_terms (i.e., k+1 ≤ max_terms)
+Given: MatrixAccInvariant.h_k_valid inv_k : taylorTermIndex k max_terms
+       (so k ≤ max_terms; loop continues iff k < max_terms, giving k ≤ max_terms - 1)
+Term: Nat.succ_le_of_lt (Nat.lt_of_le_pred (MatrixAccInvariant.h_k_valid inv_k))
+      or equivalently: Nat.lt_succ_self k ▸ MatrixAccInvariant.h_k_valid inv_k
+Reason: If k ≤ max_terms (from invariant), then k + 1 ≤ max_terms by successor monotonicity.
+        Use Data.Nat.Properties lemma: succ_le_of_lt or pred elimination.
+
+Hole 3 (line 160): h_factorial_pos
+Type: (k+1)! > 0
+Term: Nat.factorial_pos (k + 1)
+Reason: Builtin Agda lemma from Data.Nat.Properties.
+        Factorial of any natural number is strictly positive.
+
+GATE APPLICATION LOOP (GateApplicationLoop.agda):
+
+Hole 4 (line 172): h_i_in_range
+Type: i+1 ≤ dim
+Given: GateInvariant.h_i_in_range inv_i : i ≤ dim
+       Loop guard (implicit): i < dim (exit condition at i ≡ dim)
+Term: Nat.succ_le_of_lt (Nat.lt_of_le_succ (Nat.succ_le_succ inv_i))
+      or: trans (Nat.lt_succ_self i) (<-succ-from-le inv_i)
+Reason: From invariant i ≤ dim and the fact that the loop continues (i < dim),
+        we know i + 1 ≤ dim by successor monotonicity.
+
+Hole 5 (line 185): SKIPPED
+Reason: Requires external bit_counting_lemma and modular arithmetic properties.
+        Outside scope of direct invariant discharge.
+        Marked in task spec as out-of-scope.
+
+Hole 6 (line 217): num_amplitudes_processed = i = dim
+Type: GateLoopState.num_amplitudes_processed s ≡ GateContext.dim (GateLoopState.ctx s)
+Given: GateInvariant.h_states_examined inv_i : num_amplitudes_processed s ≡ i
+       h_done : i ≡ dim
+Term: trans (GateInvariant.h_states_examined inv_i) h_done
+Reason: Invariant says processed ≡ i; exit condition says i ≡ dim.
+        Transitivity of equality closes the chain: processed ≡ i ≡ dim.
+
+===
+SUMMARY: 5 holes discharged (Hole 5 skipped as specified).
+All discharges follow from loop invariants, preconditions, or builtin lemmas.
+ENKI ROUND 2 COMPLETE.

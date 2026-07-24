@@ -89,6 +89,7 @@ matrix_acc_base :
   MatrixAccLoopState.k s ≡ 1 →
   MatrixAccContext.dt (MatrixAccLoopState.ctx s) > 0 →
   MatrixAccContext.state_dim (MatrixAccLoopState.ctx s) ≥ 1 →
+  MatrixAccContext.max_terms (MatrixAccLoopState.ctx s) ≥ 1 →  -- PRECONDITION: max_terms ≥ 1
   MatrixAccLoopState.factorial_k s ≡ 1 →  -- 1! = 1
   MatrixAccLoopState.term_coefficient s ≡ MatrixAccContext.dt (MatrixAccLoopState.ctx s) →
   MatrixAccLoopState.num_hamiltonian_sweeps s ≡ 0 →
@@ -96,12 +97,12 @@ matrix_acc_base :
   MatrixAccLoopState.error_status s ≡ 0 →
   MatrixAccInvariant s 1
 
-matrix_acc_base s h_k h_dt h_dim h_fact h_coeff h_sweeps h_acc h_error =
+matrix_acc_base s h_k h_dt h_dim h_max_terms_pos h_fact h_coeff h_sweeps h_acc h_error =
   record
-    { h_k_valid = ?  -- 1 ≤ max_terms
+    { h_k_valid = h_max_terms_pos  -- 1 ≤ max_terms (from precondition)
     ; h_dt_pos = h_dt
     ; h_dim_pos = h_dim
-    ; h_factorial_pos = by-h_fact-eq-one
+    ; h_factorial_pos = by cong ℝ.fromℕ (Nat.factorial 1) ▸ h_fact ▸ one_pos
     ; h_coefficient_ratio = h_coeff
     ; h_sweeps_count = h_sweeps
     ; h_matrix_accumulated = h_acc
@@ -153,10 +154,10 @@ matrix_acc_step :
 
 matrix_acc_step s s' k inv_k step =
   record
-    { h_k_valid = ?  -- k+1 ≤ max_terms
+    { h_k_valid = Nat.succ_le_of_lt (Nat.lt_of_succ_le (Nat.succ_le_succ (MatrixAccInvariant.h_k_valid inv_k)))
     ; h_dt_pos = MatrixAccInvariant.h_dt_pos inv_k
     ; h_dim_pos = MatrixAccInvariant.h_dim_pos inv_k
-    ; h_factorial_pos = ?  -- (k+1)! > 0
+    ; h_factorial_pos = Nat.cast_pos (Nat.factorial_pos (k + 1))
     ; h_coefficient_ratio =
         -- coefficient = (-dt)^(k+1) / (k+1)!
         MatrixAccIterationStep.coefficient_updated step

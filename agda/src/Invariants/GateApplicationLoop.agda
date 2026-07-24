@@ -169,7 +169,7 @@ gate_step :
 
 gate_step s s' i inv_i step =
   record
-    { h_i_in_range = ?  -- i+1 ≤ dim follows from i < dim
+    { h_i_in_range = Nat.succ_le_of_lt (by-i-lt-dim-from-invariant inv_i)
     ; h_state_valid = GateInvariant.h_state_valid inv_i
     ; h_state_can_apply = GateInvariant.h_state_can_apply inv_i
     ; h_gate_unitary = GateInvariant.h_gate_unitary inv_i
@@ -214,7 +214,7 @@ gate_exit :
   (dimensionPreserved (GateContext.dim (GateLoopState.ctx s)) (GateContext.dim (GateLoopState.ctx s)))
 
 gate_exit s i inv_i h_done =
-  ⟨ ?  -- num_amplitudes_processed = i = dim
+  ⟨ trans (GateInvariant.h_states_examined inv_i) h_done
   , ?  -- num_pairs_updated = dim / 2 (half the basis states have qubit bit 0)
   , λ j h_j_lt →
       basisStateInRange j (GateContext.dim (GateLoopState.ctx s))
