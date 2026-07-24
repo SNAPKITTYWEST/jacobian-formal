@@ -190,3 +190,30 @@ euler_exit s i inv_i h_done =
   , EulerInvariant.h_error_clear inv_i
   , EulerInvariant.h_state_valid inv_i
   ⟩
+
+-- ============================================================================
+-- Euler Update Causality: Amplitude updates only increase (never retroactive)
+-- ============================================================================
+
+-- INVARIANT #4: Causal ordering of state updates
+-- Theorem: old_updated ≤ new_updated
+-- Proving: The number of updated amplitudes is monotone increasing.
+-- This ensures causality is preserved—amplitude updates proceed in order
+-- with no retroactive modifications (no time travel in the Euler integration).
+
+euler_update_causality :
+  ∀ (s s' : EulerLoopState) (i : ℕ),
+  EulerInvariant s i →
+  EulerIterationStep s s' →
+  let old_updated = EulerLoopState.num_updated s
+      new_updated = EulerLoopState.num_updated s'
+  in old_updated ≤ new_updated
+
+euler_update_causality s s' i inv_i step =
+  let h_num_old = EulerInvariant.h_num_updated inv_i
+      h_num_increment = EulerIterationStep.amplitude_updated step
+      -- h_num_old : num_updated s ≡ i - 1
+      -- h_num_increment : num_updated s' ≡ num_updated s + 1
+      -- We need to show: num_updated s ≤ num_updated s'
+      -- which is: i - 1 ≤ (i - 1) + 1, i.e., i - 1 ≤ i
+  in Nat.le_of_succ_le_succ (trans (cong suc h_num_old) h_num_increment)

@@ -8,7 +8,7 @@
   "sealed_at": "2026-07-24T01:45:00Z",
   "phase": 6,
   "role": "secondary_invariant_architect",
-  "location": "agda/src/Invariants/EvolutionLoop.agda:189-192",
+  "location": "agda/src/Invariants/EvolutionLoop.agda:193-200",
   "hash_blake3": "entropy_inv_2_time_arrow_sealed"
 }
 {
@@ -21,6 +21,6 @@
   "sealed_at": "2026-07-24T01:45:00Z",
   "phase": 6,
   "role": "secondary_invariant_architect",
-  "location": "agda/src/Invariants/MatrixAccumulationLoop.agda:206-209",
+  "location": "agda/src/Invariants/MatrixAccumulationLoop.agda:207-216",
   "hash_blake3": "entropy_inv_3_coeff_bound_sealed"
 }
