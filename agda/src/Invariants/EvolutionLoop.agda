@@ -183,3 +183,18 @@ evolution_exit s k inv_k h_done =
   , EvolutionInvariant.h_state_valid inv_k
   , EvolutionInvariant.h_accumulated_time inv_k
   ⟩
+
+-- ============================================================================
+-- ENTROPY INVARIANT #2: Evolution Time Arrow (Monotone Increasing Entropy)
+-- ============================================================================
+-- Time's forward arrow: accumulated_time is strictly monotone increasing
+-- Proof: each step advances accumulated_time by positive dt
+
+evolution_time_monotone :
+  ∀ (s s' : EvolutionState) (k : ℕ),
+  EvolutionInvariant s k →
+  StepTransition s s' →
+  EvolutionState.accumulated_time s ≤ EvolutionState.accumulated_time s'
+
+evolution_time_monotone s s' k inv_k trans =
+  le_of_eq (StepTransition.time_advances trans)

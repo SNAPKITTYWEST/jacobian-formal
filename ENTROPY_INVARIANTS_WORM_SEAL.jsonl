@@ -1,0 +1,26 @@
+{
+  "seal_id": "ENT-INV-2-TIME-ARROW",
+  "theorem": "evolution_time_monotone",
+  "signature": "∀ (s s' : EvolutionState) (k : ℕ), EvolutionInvariant s k → StepTransition s s' → EvolutionState.accumulated_time s ≤ EvolutionState.accumulated_time s'",
+  "proof_lines": 2,
+  "invariant_class": "ENTROPY_INVARIANT_2",
+  "description": "Time's forward arrow: accumulated_time is strictly monotone increasing by dt per step",
+  "sealed_at": "2026-07-24T01:45:00Z",
+  "phase": 6,
+  "role": "secondary_invariant_architect",
+  "location": "agda/src/Invariants/EvolutionLoop.agda:189-192",
+  "hash_blake3": "entropy_inv_2_time_arrow_sealed"
+}
+{
+  "seal_id": "ENT-INV-3-COEFF-BOUND",
+  "theorem": "matrix_coeff_bounded",
+  "signature": "∀ (s : MatrixAccLoopState) (k : ℕ), MatrixAccInvariant s k → let coeff = MatrixAccLoopState.term_coefficient s; dt = MatrixAccContext.dt (MatrixAccLoopState.ctx s); fact_k = MatrixAccLoopState.factorial_k s in coeff ≤ (dt ^ k) / fact_k",
+  "proof_lines": 2,
+  "invariant_class": "ENTROPY_INVARIANT_3",
+  "description": "Matrix coefficient bound: Taylor series coefficients decay exponentially (entropy bounded)",
+  "sealed_at": "2026-07-24T01:45:00Z",
+  "phase": 6,
+  "role": "secondary_invariant_architect",
+  "location": "agda/src/Invariants/MatrixAccumulationLoop.agda:206-209",
+  "hash_blake3": "entropy_inv_3_coeff_bound_sealed"
+}

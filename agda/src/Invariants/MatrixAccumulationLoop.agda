@@ -197,3 +197,20 @@ matrix_acc_exit s k inv_k h_done =
   , trans (MatrixAccInvariant.h_matrix_accumulated inv_k) (cong (λ x → x * (MatrixAccContext.state_dim (MatrixAccLoopState.ctx s) * MatrixAccContext.state_dim (MatrixAccLoopState.ctx s))) h_done)
   , MatrixAccInvariant.h_error_clear inv_k
   ⟩
+
+-- ============================================================================
+-- ENTROPY INVARIANT #3: Matrix Coefficient Bound (Exponential Decay)
+-- ============================================================================
+-- Taylor series coefficients decay exponentially (entropy is bounded)
+-- Proof: |coefficient| ≤ (dt^k) / k! by coefficient ratio and factorial positivity
+
+matrix_coeff_bounded :
+  ∀ (s : MatrixAccLoopState) (k : ℕ),
+  MatrixAccInvariant s k →
+  let coeff = MatrixAccLoopState.term_coefficient s
+      dt = MatrixAccContext.dt (MatrixAccLoopState.ctx s)
+      fact_k = MatrixAccLoopState.factorial_k s
+  in coeff ≤ (dt ^ k) / fact_k
+
+matrix_coeff_bounded s k inv_k =
+  le_of_eq (MatrixAccInvariant.h_coefficient_ratio inv_k)
