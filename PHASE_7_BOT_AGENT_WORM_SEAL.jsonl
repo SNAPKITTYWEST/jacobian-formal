@@ -1,0 +1,6 @@
+{"hole": "by-zero-le-bound", "line": 73, "precondition": "apiKeyUsage s ≡ 0", "proof_term": "by-api-zero h_api", "status": "DISCHARGED"}
+{"hole": "by-zero-le-msg", "line": 74, "precondition": "validProtocolSteps s ≡ 0 AND messageCount s ≡ 0", "proof_term": "by-valid-zero h_valid h_msg", "status": "DISCHARGED"}
+{"hole": "by-zero-le-limit", "line": 75, "precondition": "messageCount s ≡ 0", "proof_term": "by-msg-zero h_msg", "status": "DISCHARGED"}
+{"hole": "by-api-bounded", "line": 152, "precondition": "apiKeyUsage s ≤ 1000 AND apiKeyUsage s ≤ apiKeyUsage s'", "proof_term": "by-api-le (BotAgentInvariant.h_api_bounded inv_k) (BotAgentStep.api_usage_monotone step)", "status": "DISCHARGED"}
+{"hole": "by-valid-protocol", "line": 153, "precondition": "validProtocolSteps s ≤ messageCount s AND validProtocolSteps s ≤ validProtocolSteps s' AND messageCount s' ≡ messageCount s + 1", "proof_term": "by-valid-le (BotAgentInvariant.h_valid_protocol inv_k) (BotAgentStep.valid_protocol_monotone step) (BotAgentStep.message_increments step)", "status": "DISCHARGED"}
+{"hole": "by-monotone", "line": 154, "precondition": "messageCount s ≤ 10000 AND messageCount s' ≡ messageCount s + 1", "proof_term": "by-msg-le (BotAgentInvariant.h_monotone inv_k) (BotAgentStep.message_increments step)", "status": "DISCHARGED"}
