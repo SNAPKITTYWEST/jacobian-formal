@@ -138,8 +138,10 @@ euler_step s s' i inv_i step =
     { h_i_in_range =
         case (decide (i + 1 ≡ EulerContext.dim (EulerLoopState.ctx s) + 1)) of λ where
           (yes p) → inr p
-          (no ¬p) → inl ⟨ ?
-            , ?  -- i ≥ 1 implies i+1 ≥ 2; need to show i+1 ≤ dim
+          (no ¬p) → inl ⟨ Nat.succ_le_succ (Nat.zero_le i)
+            , Nat.lt_of_succ_lt_succ (case EulerInvariant.h_i_in_range inv_i of λ where
+                (inl ⟨ h_i_ge_1 , h_i_le_dim ⟩) → Nat.succ_lt_succ h_i_le_dim
+                (inr h_i_eq_succ) → absurd (¬p h_i_eq_succ))
             ⟩
     ; h_state_valid = EulerInvariant.h_state_valid inv_i
     ; h_ham_valid = EulerInvariant.h_ham_valid inv_i
@@ -183,7 +185,7 @@ euler_exit :
   (isValidDim (EulerContext.state (EulerLoopState.ctx s)))
 
 euler_exit s i inv_i h_done =
-  ⟨ ?  -- num_updated = i - 1 = (dim + 1) - 1 = dim
+  ⟨ trans (EulerInvariant.h_num_updated inv_i) (cong (λ x → x - 1) h_done)
   , h_done
   , EulerInvariant.h_error_clear inv_i
   , EulerInvariant.h_state_valid inv_i

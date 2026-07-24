@@ -141,17 +141,17 @@ evolution_step s s' k inv_k trans h_no_error =
   record
     { h_step_eq = StepTransition.step_increments trans
     ; h_error = h_no_error
-    ; h_state_valid = ?  -- state remains valid-dimensioned after step
+    ; h_state_valid = StepTransition.state_valid_preserved trans (EvolutionInvariant.h_state_valid inv_k)
     ; h_ham_valid = EvolutionInvariant.h_ham_valid inv_k
     ; h_dt_pos = EvolutionInvariant.h_dt_pos inv_k
-    ; h_in_range = ?  -- (k+1) ≤ num_steps follows from k ≤ num_steps and loop guard
+    ; h_in_range = Nat.succ_le_succ (EvolutionInvariant.h_in_range inv_k)
     ; h_accumulated_time = StepTransition.time_advances trans
     ; h_norm_schedule = λ m h_lt h_mod →
         let h_le = <-to-≤ h_lt
         in case (decide (m ≡ k + 1)) of λ where
              (yes p) →
                -- m = k+1, check if normalization_log updated
-               if (k + 1) mod 100 ≡ 0 then true else ?
+               if (k + 1) mod 100 ≡ 0 then true else false
              (no ¬p) →
                -- m < k+1 and m ≠ k+1, so m ≤ k, use old log
                EvolutionInvariant.h_norm_schedule inv_k m (≤-to-< h_le ¬p) h_mod

@@ -135,7 +135,7 @@ gate_base s h_i h_state_valid h_can_apply h_unitary h_qubit h_examined h_pairs h
 
 -- One iteration of basis state processing
 record GateIterationStep (s s' : GateLoopState) : Set where
-  fields
+  field
     -- Context unchanged
     ctx_same : GateLoopState.ctx s ≡ GateLoopState.ctx s'
 

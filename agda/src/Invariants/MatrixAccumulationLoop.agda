@@ -193,7 +193,7 @@ matrix_acc_exit :
   (MatrixAccLoopState.error_status s ≡ 0)
 
 matrix_acc_exit s k inv_k h_done =
-  ⟨ ?  -- sweeps = k - 1 = (max_terms + 1) - 1 = max_terms
-  , ?  -- acc = k * dim² = (max_terms + 1) * dim² ... wait, need to recalculate
+  ⟨ trans (MatrixAccInvariant.h_sweeps_count inv_k) (cong (λ x → x - 1) h_done)
+  , trans (MatrixAccInvariant.h_matrix_accumulated inv_k) (cong (λ x → x * (MatrixAccContext.state_dim (MatrixAccLoopState.ctx s) * MatrixAccContext.state_dim (MatrixAccLoopState.ctx s))) h_done)
   , MatrixAccInvariant.h_error_clear inv_k
   ⟩
