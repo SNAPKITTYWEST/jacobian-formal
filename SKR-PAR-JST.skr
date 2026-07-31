@@ -1,0 +1,93 @@
+# SOVEREIGN KNOWLEDGE RECORD
+# SKR-PAR-JST
+# Format: Sovereign Source — SnapKitty Research Labs
+
+[identity]
+skr_id         = SKR-PAR-JST
+paper_ref      = PAR-JST
+title          = The Jordan Spectral Transformer — Golden-Ratio Density-Matrix Dynamics Beyond Softmax
+version        = 1.0.0
+status         = PUBLISHED
+sealed         = 2026-07-19
+
+[authorship]
+orchestrator   = Ahmad Ali Parr
+institution    = SnapKitty Collective
+trust          = Bel Esprit D'Accord Irrevocable Trust
+ein            = 42-697643
+creator        = Parr, Ahmad
+series         = The Parr Papers: Sovereign Convergence
+
+[publication]
+doi            = 10.5281/zenodo.21443609
+zenodo_url     = https://zenodo.org/records/21443609
+doi_url        = https://doi.org/10.5281/zenodo.21443609
+published      = 2026-07-19
+license        = CC-BY-4.0
+access         = open
+language       = eng
+
+[file]
+filename       = parrpapers.pdf
+download       = https://zenodo.org/api/records/21443609/files/parrpapers.pdf/content
+
+[abstract]
+Introduces the Jordan Spectral Transformer (JST) — a quantum-inspired neural
+architecture replacing conventional softmax attention with density-matrix
+evolution followed by Born-rule measurement.
+
+Central Jordan step:
+
+    ρ' = φ⁻¹ U ρ U† + φ⁻² ρ
+
+where ρ is a density matrix, U = exp(-i dt H) is unitary evolution, and
+φ = (1+√5)/2 is the golden ratio. The coefficients satisfy:
+
+    φ⁻¹ + φ⁻² = 1
+
+making the update a convex combination — the unique positive weighting pair
+(a,b) with a+b=1 and b=a².
+
+Full forward path:
+    x → ρ₀ → ρ_N → {pⱼ} → x̂ → (x̂, receipt)
+
+Central algebraic result:
+    T(ρ*) = ρ*  ⟹  [U, ρ*] = 0
+
+This follows from the golden-ratio identity 1 - φ⁻² = φ⁻¹.
+
+[keywords]
+1 = Jordan Spectral Transformer
+2 = Jordan operator
+3 = Transformer architecture
+4 = Jordan algebra
+5 = Fibonacci contraction
+6 = Machine-checked mathematics
+7 = Quantum information
+
+[connection_to_par011]
+relation       = The JST Jordan operator T(ρ) = φ⁻¹UρU† + φ⁻²ρ is the SAME
+                 operator used in PAR-011 (Jacobian Conjecture via Jordan Algebras).
+                 JST published 2026-07-19. PAR-011 published 2026-07-31.
+                 JST is the neural architecture application.
+                 PAR-011 is the algebraic/number-theory application.
+                 Same operator. Two independent domains. One structure.
+
+[phi_convergence]
+path_1         = JST: softmax replacement (neural architecture)
+path_2         = PAR-011: Jacobian Conjecture fixed-point proof
+path_3         = Abjad-Swarm: Born-rule weighting φ^(-i) (the-49th-call)
+path_4         = I4 quartic invariant structure (gkn-i4-e7-lean)
+note           = Four independent formal contexts. Same φ = (1+√5)/2.
+
+[worm]
+chain          = SNAPKITTYWEST
+sealed_by      = Ahmad Ali Parr
+repository     = https://github.com/SNAPKITTYWEST/sov-kernel-monster
+
+[related_work]
+par_011        = https://zenodo.org/records/21727363
+jacobian_repo  = https://github.com/SNAPKITTYWEST/jacobian-formal
+gkn_theorem    = https://github.com/SNAPKITTYWEST/gkn-i4-e7-lean
+49th_call      = https://github.com/SNAPKITTYWEST/the-49th-call
+orcid          = https://orcid.org/0009-0006-1916-5245
